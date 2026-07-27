@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.K. Solution - Enterprise IT Support Services</title>
+    <style>
+        /* Global Reset & Typography */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #f4f6f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navigation Header */
+        header {
+            background-color: #0b1f3a;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        nav {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            position: relative;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .logo-img {
+            height: 45px;
+            width: auto;
+            border-radius: 50%;
+            object-fit: contain;
+        }
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .logo-text span {
+            color: #00a8ff;
+        }
+        
+        /* Mobile Hamburger Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.8rem;
+        }
+        .nav-links a {
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #00a8ff;
+            border-bottom: 2px solid #00a8ff;
+        }
+
+        /* Hero / Carousel Gallery */
+        .hero {
+            background-color: #112847;
+            color: #fff;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .carousel-container {
+            max-width: 800px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            position: relative;
+            background: #fff;
+        }
+        .carousel-slide {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            background-color: #fff;
+            flex-shrink: 0;
+        }
+        .hero-description {
+            max-width: 800px;
+            margin: 1.5rem auto 0;
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* Single Page Application Logic */
+        .page-content {
+            display: none;
+            flex: 1;
+        }
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* General Section Formatting */
+        section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 4rem 2rem;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #0b1f3a;
+            position: relative;
+            text-transform: uppercase;
+        }
+        .section-title::after {
+            content: '';
+            width: 70px;
+            height: 4px;
+            background-color: #00a8ff;
+            display: block;
+            margin: 0.5rem auto 0;
+        }
+
+        /* Home / About Us & Highlights */
+        .about-text {
+            font-size: 1.1rem;
+            text-align: justify;
+            margin-bottom: 3rem;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .highlight-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid #00a8ff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .highlight-card h3 {
+            color: #0b1f3a;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .highlight-card p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+        .client-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+            font-weight: bold;
+            color: #0b1f3a;
+            transition: transform 0.3s;
+        }
+        .client-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Technology Solution Section */
+        .tech-content {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tech-poster {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .tech-poster img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+        .service-card {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-left: 5px solid #00a8ff;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #0b1f3a;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        /* Contact Us Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        .contact-info, .contact-form {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .contact-info h3, .contact-form h3 {
+            margin-bottom: 1.5rem;
+            color: #0b1f3a;
+        }
+        .contact-info p {
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 0.4rem;
+            font-weight: bold;
+            color: #444;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        .submit-btn {
+            background-color: #00a8ff;
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #0086cc;
+        }
+
+        /* Floating Call Button */
+        .floating-call-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #00a8ff;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .floating-call-btn:hover {
+            background-color: #0086cc;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0b1f3a;
+            color: #fff;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+
+        /* Responsive Mobile Layout Updates */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #0b1f3a;
+                padding: 1rem 0;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                gap: 0;
+                text-align: center;
+            }
+            .nav-links.show {
+                display: flex;
+            }
+            .nav-links li {
+                width: 100%;
+            }
+            .nav-links a {
+                display: block;
+                padding: 0.8rem;
+                width: 100%;
+            }
+            .nav-links a:hover, .nav-links a.active {
+                background-color: #112847;
+                border-bottom: none;
+            }
+            section {
+                padding: 2.5rem 1rem;
+            }
+            .section-title {
+                font-size: 1.6rem;
+            }
+            .about-text, .tech-content, .contact-info, .contact-form {
+                padding: 1.5rem;
+            }
+            .carousel-slide img {
+                height: 230px;
+            }
+            .hero-description {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            .logo-img {
+                height: 38px;
+            }
+            .carousel-slide img {
+                height: 180px;
+            }
+            .floating-call-btn span {
+                display: none;
+            }
+            .floating-call-btn {
+                padding: 14px;
+                border-radius: 50%;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <header>
+        <nav>
+            <div class="logo-container" onclick="showPage('home')">
+                <!-- UPDATED RELATIVE IMAGE PATH BELOW -->
+                <img src="C:\Users\Abc\Documents\sk.jpg" alt="S.K. Solution Logo" class="logo-img">
+                <div class="logo-text">S.K. <span>Solution</span></div>
+            </div>
+
+            <!-- Hamburger Icon for Mobile -->
+            <div class="menu-toggle" id="mobile-menu-btn" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a id="nav-home" class="active" onclick="showPage('home')">HOME</a></li>
+                <li><a id="nav-technology" onclick="showPage('technology')">TECHNOLOGY SOLUTION</a></li>
+                <li><a id="nav-careers" onclick="showPage('careers')">CAREERS</a></li>
+                <li><a id="nav-contact" onclick="showPage('contact')">CONTACT US</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- PAGE 1: HOME PAGE -->
+    <main id="home" class="page-content active">
+        <!-- Hero Gallery Carousel -->
+        <div class="hero">
+            <div class="carousel-container">
+                <div class="carousel-slide" id="carouselSlide">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Team Discussion">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Corporate Boardroom Meeting">
+                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80" alt="Business Network Silhouettes">
+                    <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80" alt="Robotic Connection">
+                    <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80" alt="Teamwork Steps to Success">
+                </div>
+            </div>
+            <p class="hero-description">
+                "Coming together to foster collaboration, driving businesses through technology toward ultimate success."
+            </p>
+        </div>
+
+        <section>
+            <h2 class="section-title">About Us</h2>
+            <div class="about-text">
+                S.K. Solution was founded in India in 2012 and has expanded its operations across Mumbai. With over 100 team members servicing our esteemed clients, S.K. Solution is a world-class Enterprise IT Support Services company. We serve clients across all major sectors, including financial institutions, technology, telecommunications, manufacturing, healthcare, and professional services.
+            </div>
+
+            <!-- Value Highlights -->
+            <h2 class="section-title">Why Choose Us</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <h3>100+</h3>
+                    <p>Skilled IT Professionals & Consultants</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>3 Regions</h3>
+                    <p>Cross-Border Delivery in India, Singapore & Malaysia</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Flexible SLAs</h3>
+                    <p>Agile Sourcing Tailored to Your Business Needs</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Lower TCO</h3>
+                    <p>Cost-Effective IT Operations with Minimal Risk</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Our Clients</h2>
+            <div class="clients-grid">
+                <div class="client-card"><p>MTNL</p></div>
+                <div class="client-card"><p>Shree Engineering</p></div>
+                <div class="client-card"><p>SRL Diagnostics</p></div>
+                <div class="client-card"><p>CMC Limited</p></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PAGE 2: TECHNOLOGY SOLUTION PAGE -->
+    <main id="technology" class="page-content">
+        <section>
+            <h2 class="section-title">Technology Solution</h2>
+            <div class="tech-content">
+                <p>At <strong>S.K. Solution</strong>, we understand that modern IT departments face relentless pressure to deliver high performance efficiently. As business priorities evolve, organizations require dynamic flexibility in both team sizing and specialized technical skill sets.</p>
+                <br>
+                <p>Our short- and long-term staffing options enable clients to maintain operational stability and stay focused on core project delivery. This strategic flexibility reduces Total Cost of Ownership (TCO) while minimizing execution risk. Powered by a core team of tech-savvy IT experts with proven track records and deep industry domain knowledge, S.K. Solution has earned client confidence as a trusted, one-stop partner.</p>
+                <br>
+                <p>We have successfully sourced and onboarded techno-functional consultants across <strong>India, Singapore, and Malaysia</strong> to manage mission-critical business applications and infrastructure support needs at all enterprise levels.</p>
+                <br>
+                <p>As a focused, pure-play IT Service Management provider, S.K. Solution is uniquely positioned to fulfill selective sourcing requirements with flexible Service Level Agreements (SLAs). Our entrepreneurial culture keeps us fast, agile, and responsive. Furthermore, our collaborative approach allows us to form strategic partnerships—even with industry peers—to deliver ultimate IT Service Management excellence.</p>
+                <br>
+                <p>In addition, S.K. Solution offers a single-source, comprehensive delivery model for <strong>Facility Management Services</strong>. This empowers organizations to proactively manage and adapt to operational change through tailored solution designed to consistently exceed expectations.</p>
+
+                <div class="tech-poster">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Growth and Nurturing Concept">
+                </div>
+
+                <h3 style="color: #0b1f3a; margin-top: 1.5rem;">Services We Provide:</h3>
+                <div class="services-grid">
+                    <div class="service-card">Infrastructure Support</div>
+                    <div class="service-card">Desktop Management</div>
+                    <div class="service-card">Printers Management</div>
+                    <div class="service-card">Machine Upgrades</div>
+                    <div class="service-card">Helpdesk Management</div>
+                    <div class="service-card">Onsite Support</div>
+                    <div class="service-card">AMC Management</div>
+                    <div class="service-card">Vendor Management</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PAGE 3: CAREERS PAGE -->
+    <main id="careers" class="page-content">
+        <section>
+            <h2 class="section-title">Join Our Team</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Explore Opportunities</h3>
+                    <p>We are continuously expanding our talent network across <strong>India, Singapore, and Malaysia</strong>. Join S.K. Solution and work with industry-leading enterprise clients.</p>
+                    
+                    <h4 style="color: #0b1f3a; margin: 1.5rem 0 1rem;">Current Open Positions:</h4>
+                    <div class="service-card" style="margin-bottom: 0.8rem;">
+                        <strong>Techno-Functional Consultant</strong>
+                        <p style="font-weight: normal; font-size: 0.9rem; color: #555;">Full-Time | India / Singapore / Malaysia</p>
+                    </div>
+                    <div class="service-card" style="margin-bottom: 0.8rem;">
+                        <strong>Infrastructure Support Engineer</strong>
+                        <p style="font-weight: normal; font-size: 0.9rem; color: #555;">Full-Time | Mumbai / Thane</p>
+                    </div>
+                    <div class="service-card">
+                        <strong>Desktop & Facility Support Specialist</strong>
+                        <p style="font-weight: normal; font-size: 0.9rem; color: #555;">Full-Time | Thane Office</p>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3>Apply Now</h3>
+                    <form id="careerForm" onsubmit="handleCareerSubmit(event)">
+                        <div class="form-group">
+                            <label for="c-name">Full Name</label>
+                            <input type="text" id="c-name" required placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="c-email">Email Address</label>
+                            <input type="email" id="c-email" required placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="c-phone">Contact Number</label>
+                            <input type="tel" id="c-phone" required placeholder="Enter your contact number">
+                        </div>
+                        <div class="form-group">
+                            <label for="c-role">Position Applying For</label>
+                            <select id="c-role" required>
+                                <option value="">Select a role</option>
+                                <option value="Techno-Functional Consultant">Techno-Functional Consultant</option>
+                                <option value="Infrastructure Support Engineer">Infrastructure Support Engineer</option>
+                                <option value="Desktop Specialist">Desktop Specialist</option>
+                                <option value="Other IT Role">Other IT Support Role</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="c-summary">Summary of Experience</label>
+                            <textarea id="c-summary" placeholder="Briefly describe your skills and years of experience" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit Profile</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PAGE 4: CONTACT US PAGE -->
+    <main id="contact" class="page-content">
+        <section>
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Our Location & Details</h3>
+                    <p><strong>Phone Number:</strong> +91 8169371781</p>
+                    <p><strong>Email Address:</strong> s.k.solution2011@gmail.com</p>
+                    <p><strong>Website:</strong> sksolution.in</p>
+                    <p><strong>Address:</strong><br>
+                    S.K. Solution<br>
+                    N.G. Vihar, Near Laxmipark-1,<br>
+                    Lokmanya Nagar, Thane (West) - 400606,<br>
+                    Thane, Maharashtra, India.</p>
+
+                    <!-- EMBEDDED GOOGLE MAP -->
+                    <div style="margin-top: 1.5rem; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3767.8923482348!2d72.9612!3d19.1983!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDExJzUzLjkiTiA3MsKwNTcnNDAuMyJF!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin" 
+                            width="100%" 
+                            height="220" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3>Send Your Enquiry</h3>
+                    <form id="enquiryForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Please enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" placeholder="Please enter your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Contact Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Please enter your contact number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="enquiry">Your Enquiry</label>
+                            <textarea id="enquiry" name="enquiry" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit Enquiry</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FLOATING CALL BUTTON -->
+    <a href="tel:+918169371781" class="floating-call-btn" title="Call S.K. Solution">
+        📞 <span>Call Support</span>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2012 S.K. Solution. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript Navigation & Form Scripts -->
+    <script>
+        // Toggle mobile navigation menu
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+
+        // Tab switching function for multi-page behavior
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('nav-' + pageId).classList.add('active');
+
+            // Close mobile menu when a page link is clicked
+            document.getElementById('navLinks').classList.remove('show');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Image Slider Functionality
+        let index = 0;
+        function slideImages() {
+            const slide = document.getElementById('carouselSlide');
+            if (slide) {
+                const totalSlides = slide.children.length;
+                index = (index + 1) % totalSlides;
+                slide.style.transform = `translateX(-${index * 100}%)`;
+            }
+        }
+        setInterval(slideImages, 3000);
+
+        // Interactive Contact Form Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for contacting S.K. Solution! Your enquiry has been received.');
+            document.getElementById('enquiryForm').reset();
+        }
+
+        // Interactive Career Form Handler
+        function handleCareerSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for submitting your application! Our recruitment team will review your details.');
+            document.getElementById('careerForm').reset();
+        }
+    </script>
+</body>
+</html>
